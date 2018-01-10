@@ -63,13 +63,6 @@ ID names should specify type of element follow by use of the content.
 | FloatingActionButton | fab_ |
 | ProgressBar | progress_ |
 
-```
-<ImageView
-    android:id="@+id/image_profile"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-```
-
 ## Android Java Styles
 ### Fields Naming
 * Constants (static final fields) are ALL_CAPS_WITH_UNDERSCORES.
@@ -79,15 +72,12 @@ ID names should specify type of element follow by use of the content.
 
 ```java
 public class MainActivity {
-    public static final int CONSTANT = 42;
+    public static final String TITLE_DIALOG = "title";
     
-    public int publicField;
+    public int id;
     
-    protected int mProtected;
-    private static MyClass sSingleton;
-    private int mPrivate;
-
-    int mPackagePrivate;
+    private static int sVariable;
+    private int mVariable;
 }
 ```
 
@@ -100,11 +90,8 @@ public class MainActivity {
 
 ```java
 private static final String PREF_EMAIL = "PREF_EMAIL";
-private static final String BUNDLE_AGE = "BUNDLE_AGE";
-
-// Intent-related items use full package name as value
-private static final String EXTRA_SURNAME = "com.myapp.extras.EXTRA_SURNAME";
-private static final String ACTION_OPEN_USER = "com.myapp.action.ACTION_OPEN_USER";
+private static final String BUNDLE_EMAIL = "BUNDLE_EMAIL";
+private static final String EXTRA_EMAIL = "com.myapp.extras.EXTRA_EMAIL";
 ```
 
 ### Braces
@@ -132,9 +119,9 @@ public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     
-    private TextView mTextViewTitle;
+    private EditText mEditTextEmail;
     
-    private String mTitle;
+    private String mEmail;
 ```
 
 ### Methods Ordering
@@ -167,7 +154,11 @@ loadPicture(context,
 Use Log to print out error messages or other information that may be useful for developers to identify issues. VERBOSE and DEBUG logs must be disabled on release builds. Leave INFORMATION, WARNING and ERROR logs enabled only if they are not leaking private information such as email addresses.
 
 To only show logs on debug builds:
-`if (BuildConfig.DEBUG) Log.d(TAG, "The value of x is " + x);`
+```
+if (BuildConfig.DEBUG) {
+     Log.d(TAG, "Email: " + email);
+}
+```
 
 ### Verbose
 Show all log messages (default).
