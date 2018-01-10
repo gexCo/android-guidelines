@@ -105,15 +105,17 @@ if(isTrue) {
 ```
 Use braces even if the if condition and body fit on one line!
 
-```
-if (condition) body();
+```java
+if(isTrue) {
+    // ...
+}
 ```
 ### Variables Ordering
 1. Constants
 2. UI variables (TextView etc)
 3. Other variables (String, int)
 
-```
+```java
 public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -121,6 +123,7 @@ public class MainActivity extends Activity {
     private EditText mEditTextEmail;
     
     private String mEmail;
+}
 ```
 
 ### Methods Ordering
@@ -134,14 +137,14 @@ public class MainActivity extends Activity {
 Each code line should not exceed 100 characters. 
 
 #### Long Method Chain
-```
+```java
 Picasso.with(context)
         .load("http://google.com/hello.jpg")
         .into(imageView);
 ```
 
 #### Long Method Paramters
-```
+```java
 loadPicture(context,
         "http://google.com/hello.jpg",
         mImageViewProfilePicture,
@@ -153,7 +156,7 @@ loadPicture(context,
 Use Log to print out error messages or other information that may be useful for developers to identify issues. VERBOSE and DEBUG logs must be disabled on release builds. Leave INFORMATION, WARNING and ERROR logs enabled only if they are not leaking private information such as email addresses.
 
 To only show logs on debug builds:
-```
+```java
 if (BuildConfig.DEBUG) {
      Log.d(TAG, "Email: " + email);
 }
