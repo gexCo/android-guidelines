@@ -10,7 +10,6 @@ Class names are in **UpperCamelCase**.
 | Activity | LoginActivity | 
 | Fragment | ProfileFragment | 
 | Service | BroadcastService |
-| RecyclerView | ContactRecyclerView | 
 | Adapter | ContactAdapter | 
 | Holder | ContactHolder | 
 | Dialog | EditTextDialog |
