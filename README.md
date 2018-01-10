@@ -3,7 +3,17 @@ Code guidelines used when developing Android applications.
 
 ## Naming Convention
 ### Class Files
-Class names are in **UpperCamelCase**. The name should end with component, for example: LoginActivity, ProfileFragment, BroadcastService, ContactAdapter, ContactHolder.
+Class names are in **UpperCamelCase**. 
+
+| Component | Class Name | 
+| --- | ---  | 
+| Activity | LoginActivity | 
+| Fragment | ProfileFragment | 
+| Service | BroadcastService |
+| RecyclerView | ContactRecyclerView | 
+| Adapter | ContactAdapter | 
+| Holder | ContactHolder | 
+| Dialog | EditTextDialog |
 
 ### Resource Files
 Resource names are in **lowercase_underscore**.
@@ -19,7 +29,7 @@ Layout names should specify the component type follow by the class name defined.
 | Dialog | EditTextDialog | dialog_edit_text |
 
 #### Strings
-String names should specify the content type follow by the type of element (title, ). 
+String names should specify the type of string follow by the use of string.
 
 | Prefix | Description | 
 | --- | ---  | 
@@ -41,7 +51,7 @@ Drawable names should specify the type of drawable follow by the use of drawable
 | Icon | ic_ | ic_launcher |
 
 #### Resources ID
-ID names should specify type of element follow by purpose of the content.
+ID names should specify type of element follow by use of the content.
 
 |Element | Prefix |
 | --- | --- |
