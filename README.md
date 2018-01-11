@@ -204,14 +204,16 @@ public class MainActivity {
 ```
 
 ## Libraries
+* [AutoValue](https://github.com/google/auto/tree/master/value)
 * [Butterknife](https://github.com/JakeWharton/butterknife)
 * [Calligraphy](https://github.com/chrisjenx/Calligraphy)
 * [Dagger](https://github.com/google/dagger)
+* [Facebook Stetho](https://github.com/facebook/stetho)
 * [Gson](https://github.com/google/gson)
 * [Picasso](https://github.com/square/picasso)
 * [ReactiveX](https://github.com/ReactiveX/RxAndroid)
 * [Retrofit](https://github.com/square/retrofit)
-* [Facebook Stetho](https://github.com/facebook/stetho)
+* [SQL Brite](https://github.com/square/sqlbrite)
 * [Timber](https://github.com/JakeWharton/timber)
 
 # References
