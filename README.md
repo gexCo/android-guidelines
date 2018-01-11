@@ -206,9 +206,13 @@ public class MainActivity {
 ## Libraries
 * [Butterknife](https://github.com/JakeWharton/butterknife)
 * [Calligraphy](https://github.com/chrisjenx/Calligraphy)
+* [Dagger](https://github.com/google/dagger)
 * [Gson](https://github.com/google/gson)
 * [Picasso](https://github.com/square/picasso)
+* [ReactiveX](https://github.com/ReactiveX/RxAndroid)
 * [Retrofit](https://github.com/square/retrofit)
+* [Facebook Stetho](https://github.com/facebook/stetho)
+* [Timber](https://github.com/JakeWharton/timber)
 
 # References
 * [Project Guidelines](https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
