@@ -45,8 +45,8 @@ Drawable names should specify the type of drawable follow by the use of drawable
 | Background image (png, jpeg) | bg_ | bg_article |
 | Button with background | btn_bg | btn_bg_purple |
 | Button with border | btn_bd | btn_bd_purple |
-| Button with radius 3dp | btn_rd | btn_rd_3 |
-| Button with background, border and radius | btn_bg_bd_rd | btn_bg_white_bd_purple_rd_3  |
+| Button with radius | btn_rd | btn_radius |
+| Button with background, border and radius | btn_bg_bd_rd | btn_bg_white_bd_purple_rd  |
 | Icon | ic_ | ic_launcher |
 
 #### Resources ID
