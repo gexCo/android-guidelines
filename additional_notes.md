@@ -22,6 +22,5 @@ Dependency Injection is a software design pattern in which one or more dependenc
 
 #### Example: [Dagger](https://github.com/google/dagger)
 1. Take all fields with annotation
-2. Look into `ViewGroup` and find the view by id
-3. Cast to expected type
-4. Set field
+2. Look into `Component` and find the object by type
+3. Set field
