@@ -1,4 +1,4 @@
-# Android Guidelines 
+# Android Code Style
 Code guidelines used when developing Android applications.
 
 ## Naming Convention
