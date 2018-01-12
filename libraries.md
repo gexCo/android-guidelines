@@ -1,4 +1,4 @@
-# Android Library
+# Android Libraries
 
 ## [AutoValue](https://github.com/google/auto/tree/master/value)
 ## [Butterknife](https://github.com/JakeWharton/butterknife)
