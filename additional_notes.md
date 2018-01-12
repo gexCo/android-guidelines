@@ -14,13 +14,13 @@ Annotations simplify code in applications and reduces the boilerplate(code with 
 ### Dependency Injection With Annotations
 Dependency Injection is a software design pattern in which one or more dependencies are injected into dependent object. Developers do not have to create objects themselves; let the dependency offer the object.
 
-#### Example: [Butterknife](https://github.com/JakeWharton/butterknife)
+#### [Butterknife](https://github.com/JakeWharton/butterknife)
 1. Take all fields with annotation
 2. Look into `ViewGroup` and find the view by id
 3. Cast to expected type
 4. Set field
 
-#### Example: [Dagger](https://github.com/google/dagger)
+#### [Dagger](https://github.com/google/dagger)
 1. Take all fields with annotation
 2. Look into `Component` and find the object by type
 3. Set field
