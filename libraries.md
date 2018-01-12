@@ -125,7 +125,7 @@ Dagger 2 library handles dependency injection for Android applications. Dependen
 
 | Annotation | Description |
 | --- | --- |
-| `@Module | Classes with methods that provides dependencies |
+| `@Module` | Classes with methods that provides dependencies |
 | `@Provides` | Methods within `@Method` classes |
 | `@Provides @Singleton` | Indicates there will be only one instance of object |
 | `@Inject` | Request a dependency (a constructor, a field or a method) |
