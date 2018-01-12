@@ -6,10 +6,10 @@ Annotations simplify code in applications and reduces the boilerplate(code with 
 ### Annotation Processing
 1. Build starts in java compiler. (Java compiler knows all processors, so if we want to create new one, we need to tell to compiler.)
 2. Starts all Annotation Processors which is not executed. (Every annotation processor has its own implementation)
-3. Loop over annotated elements inside the processor and find annotated classes, methods, fields.
-4. Generate a new class with metadata of founded classes, methods, fields. (This is the place where you generate code.)
-5. Create new file and write your generated string as a class.
-6. Compiler checks if all annotation processors are executed. If not, start to next round.
+3. Loop over annotated elements inside the processor and find annotated classes, methods, fields
+4. Generate a new class with metadata of founded classes, methods, fields. 
+5. Create new file and write your generated string as a class
+6. Compiler checks if all annotation processors are executed. If not, start to next round.
 
 ### Dependency Injection With Annotations
 Dependency Injection is a software design pattern to make applications loosely coupled, extensible and maintainable. Developers do not have to create objects themselves; they let the dependency offer the object.
