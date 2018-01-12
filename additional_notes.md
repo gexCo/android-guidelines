@@ -25,5 +25,5 @@ Dependency Injection is a software design pattern in which one or more dependenc
 2. Look into `Component` and find the object by type
 3. Set field
 
-# References
+## References
 * [Annotation Processing](https://medium.com/@iammert/annotation-processing-dont-repeat-yourself-generate-your-code-8425e60c6657)
