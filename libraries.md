@@ -124,6 +124,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
 Dagger 2 library handles dependency injection for Android applications. Dependency Injection is a software design pattern to make applications loosely coupled, extensible and maintainable. There is dependency when an object depends on another object to do work. In dependency injection context, dependencies are supplied to the class that needs dependency to avoid the need for a class itself to create them for software to be loosely coupled and highly maintainable.
 
 | Annotation | Description |
+| --- | --- |
 | @Module | Classes with methods that provides dependencies |
 | @Provides | Methods within `@Method` classes |
 | @Provides @Singleton | Indicates there will be only one instance of object |
