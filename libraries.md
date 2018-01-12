@@ -102,16 +102,16 @@ public class MyFragment extends Fragment {
 ### ViewHolder
 ```java
 public class MyViewHolder extends RecyclerView.ViewHolder {
-  @BindView(R.id.name)
+    @BindView(R.id.name)
     TextView name;
  
     @BindView(R.id.mobile)
     TextView mobile;
  
     public MyViewHolder(View view) {
-      super(view);
+        super(view);
 
-       ButterKnife.bind(this, view);
+        ButterKnife.bind(this, view);
     }
 }
 ```
