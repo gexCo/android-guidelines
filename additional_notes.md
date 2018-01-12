@@ -1,7 +1,7 @@
 # Android
 
 ## Annotation
-Annotations simplify code in applications and reduces the boilerplate of common patterns, such as setting click listeners, enforcing ui/background thread executions. Some examples include `@Override` and `@Singleton`.
+Annotations simplify code in applications and reduces the boilerplate(code with common patterns that is better to be auto-generated, e.g. getter and setter method in a Class). `@Override` is an example of Android annotations. 
 
 ### Annotation Processing
 1. Build starts in java compiler. (Java compiler knows all processors, so if we want to create new one, we need to tell to compiler.)
@@ -24,3 +24,6 @@ Dependency Injection is a software design pattern in which one or more dependenc
 1. Take all fields with annotation
 2. Look into `Component` and find the object by type
 3. Set field
+
+# References
+* [Annotation Processing](https://medium.com/@iammert/annotation-processing-dont-repeat-yourself-generate-your-code-8425e60c6657)
