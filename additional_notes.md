@@ -12,7 +12,7 @@ Annotations simplify code in applications and reduces the boilerplate(code with 
 6. Compiler checks if all annotation processors are executed. If not, start to next round.
 
 ### Dependency Injection With Annotations
-Dependency Injection is a software design pattern in which one or more dependencies are injected into dependent object. Developers do not have to create objects themselves; let the dependency offer the object.
+Dependency Injection is a software design pattern to make applications loosely coupled, extensible and maintainable. Developers do not have to create objects themselves; they let the dependency offer the object.
 
 #### [Butterknife](https://github.com/JakeWharton/butterknife)
 1. Take all fields with annotation
