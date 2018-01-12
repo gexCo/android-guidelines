@@ -8,12 +8,12 @@ Butterknife library is used for view injection in Android using annotations.
 
 | Annotation | Description | Example |
 | --- | --- | --- |
-| @BindView | Binds view object such as TextView. | `@BindView(R.id.text_name)`<br>`TextView textName` |
-| @onClick | Attach click event on an element.<br>Once this is used, we do not have to declare the button `@BindView(R.id.btn1) Button btn1` anymore. |   `@onClick(R.id.btn1, R.id.btn2)`<br>`void onButtonClick(View view)` 
-| @BindDrawable | Binds drawable element. | `@BindDrawable(R.mipmap.ic_launcher)`<br>`Drawable logo` |
-| @BindString | Binds string resource. | `@BindString(R.string.name)`<br>`String name` |
-| @BindColor | Binds color resource | `@BindColor(R.color.colorPrimary)`<br>`int colorBar`|
-| @BindAnim | Binds anim resource | `@BindAnim(R.anim.move_left)`<br>`Animation animMoveLeft` |
+| `@BindView` | Binds view object such as TextView. | `@BindView(R.id.text_name)`<br>`TextView textName` |
+| `@onClick` | Attach click event on an element.<br>Once this is used, we do not have to declare the button `@BindView(R.id.btn1) Button btn1` anymore. |   `@onClick(R.id.btn1, R.id.btn2)`<br>`void onButtonClick(View view)` 
+| `@BindDrawable` | Binds drawable element. | `@BindDrawable(R.mipmap.ic_launcher)`<br>`Drawable logo` |
+| `@BindString` | Binds string resource. | `@BindString(R.string.name)`<br>`String name` |
+| `@BindColor` | Binds color resource | `@BindColor(R.color.colorPrimary)`<br>`int colorBar`|
+| `@BindAnim` | Binds anim resource | `@BindAnim(R.anim.move_left)`<br>`Animation animMoveLeft` |
 
 ### Gradle
 #### build.gradle(Project)
@@ -125,11 +125,11 @@ Dagger 2 library handles dependency injection for Android applications. Dependen
 
 | Annotation | Description |
 | --- | --- |
-| @Module | Classes with methods that provides dependencies |
-| @Provides | Methods within `@Method` classes |
-| @Provides @Singleton | Indicates there will be only one instance of object |
-| @Inject | Request a dependency (a constructor, a field or a method) |
-| @Component | Bridge interface between `@Module` and `@Inject` |
+| `@Module | Classes with methods that provides dependencies |
+| `@Provides` | Methods within `@Method` classes |
+| `@Provides @Singleton` | Indicates there will be only one instance of object |
+| `@Inject` | Request a dependency (a constructor, a field or a method) |
+| `@Component` | Bridge interface between `@Module` and `@Inject` |
 
 ### Steps
 1. Identify the dependent objects and its dependencies.
