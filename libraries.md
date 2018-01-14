@@ -121,22 +121,37 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
 ## [Calligraphy](https://github.com/chrisjenx/Calligraphy)
 
 ## [Dagger 2](https://github.com/google/dagger)
-Dagger 2 library handles dependency injection for Android applications. Dependency Injection is a software design pattern to make applications loosely coupled, extensible and maintainable. There is dependency when an object depends on another object to do work. In dependency injection context, dependencies are supplied to the class that needs dependency to avoid the need for a class itself to create them for software to be loosely coupled and highly maintainable.
+Dagger 2 library handles dependency injection for Android applications. Dependency Injection is a software design pattern to make applications loosely coupled, extensible and maintainable. There is dependency when an object depends on another object to do work. 
+
+A dependency is an object that can be used (as a service). An injection is the passing of a dependency to a dependent object. In dependency injection context, dependencies are supplied to the class that needs dependency to avoid the need for a class itself to create them for software to be loosely coupled and highly maintainable. 
+
+An example in Android context would be to get a reference to SharedPreferences, we have to use `this.getSharedPreferences` where `this` represents `Context` in Android.
+```
+public class MyApplication extends Application {
+
+    private SharedPreferences myPrefs;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        
+        myPrefs = this.getSharedPreferences("com.company", Context.MODE_PRIVATE);
+    }
+}
+```
+
+Instead of getting `Context` directly, we request `Context` from Dagger and Dagger will look for `Context` on your behalf.
+```
+```
 
 | Annotation | Description |
 | --- | --- |
-| `@Module` | Classes with methods that provides dependencies |
-| `@Provides` | Methods within `@Method` classes |
-| `@Provides @Singleton` | Indicates there will be only one instance of object |
-| `@Inject` | Request a dependency (a constructor, a field or a method) |
-| `@Component` | Bridge interface between `@Module` and `@Inject` |
-
-### Steps
-1. Identify the dependent objects and its dependencies.
-2. Create a class with the @Module annotation, using the @Provides annotation for every method that returns a dependency.
-3. Request dependencies in your dependent objects using the @Inject annotation.
-4. Create an interface using the @Component annotation and add the classes with the @Module annotation created in the second step.
-5. Create an object of the @Component interface to instantiate the dependent object with its dependencies.
+| `@Inject` | Used in a constructor, a field or a method in dependent object |
+| `@Module` | Classes with methods that provides method to retrieve dependent object |
+| `@Component` | Bridge interface between `@Module` and `@Inject`, containing all places where object is used |
+| `@Provides` | Methods within `@Module` classes that returns object |
+| `@Singleton` | Object is created only once and same object is used everywhere |
+| `@PerActivity` | Custom annotation where object is created only once throughout an activity, but another instance is created in a different activity |
 
 ### Gradle
 #### build.gradle(Project)
@@ -159,120 +174,6 @@ dependencies {
     compile 'com.google.dagger:dagger:2.0-SNAPSHOT' // Dagger library
     apt 'com.google.dagger:dagger-compiler:2.0-SNAPSHOT' // Code generation
     provided 'org.glassfish:javax.annotation:10.0-b28'  // Additional annotations required outside Dagger
-}
-```
-
-### Step 1: Identify Dependent Objects
-`Vehicle`(dependent) requires `Motor`(independent) to work properly. 
-
-#### Motor
-```java
-public class Motor {
- 
-    private int rate;
- 
-    public Motor(){
-        this.rate = 0;
-    }
- 
-    public int getRate(){
-        return rate;
-    }
- 
-    public void accelerate(int value){
-        rate = rate + value;
-    }
- 
-    public void brake(){
-        rate = 0;
-    }
-}
-```
-
-#### Vehicle
-```java
-public class Vehicle {
- 
-    private Motor motor;
- 
-    public Vehicle(Motor motor){
-        this.motor = motor;
-    }
- 
-    public void increaseSpeed(int value){
-        motor.accelerate(value);
-    }
- 
-    public void stop(){
-        motor.brake();
-    }
- 
-    public int getSpeed(){
-        return motor.getRpm();
-    }
-}
-```
-
-### Step 2: Create `@Module` Class
-#### VehicleModule
-`VehicleModule` provides the objects needed with its dependencies satisfied. Since `Vehicle` is dependent on `Motor`, both providers are created in this class, with `Vehicle` indicating its dependency to `Motor` as parameters. Every provider method must have `@Provides` annotation and the class must have `@Module` annotation.
-
-```java
-@Module
-public class VehicleModule {
- 
-    @Provides @Singleton
-    Motor provideMotor(){
-        return new Motor();
-    }
- 
-    @Provides @Singleton
-    Vehicle provideVehicle(){
-        return new Vehicle(new Motor());
-    }
-}
-```
-
-### Step 3: Request Dependencies in Dependent Objects
-Add `@Inject` annotation in `Vehicle` constructor. Note that `@Inject` can be used to request dependencies in constructor, fields or even methods.
-
-```java
-@Inject
-public Vehicle(Motor motor){
-    this.motor = motor;
-}
-```
-
-### Step 4: Connect `@Module` With `@Inject`
-Connection between provider of dependencies `@Module` and class requesting them `@Inject` is made using `@Component` as an interface. Add methods for dependent providers.
-
-```java
-@Singleton
-@Component(modules = {VehicleModule.class})
-public interface VehicleComponent {
-
-    Vehicle provideVehicle();
- 
-}
-```
-
-### Step 5: Use `@Component` Interface to Obtain Objects
-```
-public class MainActivity extends ActionBarActivity {
- 
-    Vehicle vehicle;
- 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
- 
-        VehicleComponent component = Dagger_VehicleComponent.builder().vehicleModule(new VehicleModule()).build();
- 
-        vehicle = component.provideVehicle();
- 
-        Toast.makeText(this, String.valueOf(vehicle.getSpeed()), Toast.LENGTH_SHORT).show();
-    }
 }
 ```
 
