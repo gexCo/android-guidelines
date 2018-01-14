@@ -1,7 +1,7 @@
 # Android Libraries
 * [AutoValue](https://github.com/jun159/android-guidelines/blob/master/libraries.md#autovalue)
 * [ButterKnife](https://github.com/jun159/android-guidelines/blob/master/libraries.md#butterknife)
-* [Dagger 2](https://github.com/jun159/android-guidelines/blob/master/libraries.md#dagger2)
+* [Dagger 2](https://github.com/jun159/android-guidelines/blob/master/libraries.md#dagger-2)
 
 ## [AutoValue](https://github.com/google/auto/tree/master/value)
 AutoValue is a code generating annotation processor that reduces boilerplate code. For example in OOP, classes often comes with getter, setter, equals(Object), hashCode() and toString() methods. These methods are considered as boilerplate as they are written in the standard way in every class. To avoid writing by hand, we use `AutoValue` to auto-generate these methods at compile time. 
