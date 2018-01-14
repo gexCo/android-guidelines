@@ -459,7 +459,38 @@ public class MyApplication extends Application {
 | `@Component` | Bridge interface between `@Module` and `@Inject`, containing all places where object is used |
 | `@Provides` | Methods within `@Module` classes that returns object |
 | `@Singleton` | Object is created only once and same object is used everywhere |
-| `@PerActivity` | Custom annotation where object is created only once throughout an activity, but another instance is created in a different activity |
+
+### Custom Qualifer
+`@Qualifier` annotation create "tags" for dependencies which have the same interface, such as Application and Activity. Qualifier will help you to identify the appropriate one. Some examples are:
+
+| Annotation | Description |
+| --- | --- |
+| `@ActivityContext` | Keeps references as long as Activity exists<br>(E.g. we can share single instance of any class between all fragments hosted in this Activity) |
+| `@ApplicationContext` | Keeps references as long as Application exists |
+
+Simply define a custom qualifier like this:
+```java
+@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ActivityContext {
+}
+```
+
+### Custom Scopes
+Scopes mechanism cares about keeping single instance of class as long as its scope exists. Scopes give us "local singletons" which live as long as scope itself. It is similar to `@Singleton` annotation. Some examples are:
+
+| Annotation | Description |
+| --- | --- |
+| `@UserScope` | Scope for classes instances associated with picked user, keeps references as long as User exists<br>(E.g. Logged-in user) | `@PerActivity` | Scope to permit objects whose lifetime should conform to the life of an Activity |
+| `@ConfigPersistent` | Scope to annotate dependencies that need to survive configuration changes (e.g. Presenters)  |
+
+Simply define a custom scope like this:
+```java
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PerActivity {
+}
+```
 
 ### Step 1: Gradle
 #### build.gradle(Project)
@@ -761,3 +792,4 @@ public class ReleaseTree extends Timber.Tree {
 * [AutoValue Gson Extension with Retrofit 2.0](https://medium.com/3xplore/autovalue-with-retrofit-2-0-61f9530787b1)
 * [Android Working With ButterKnife ViewBinding Library](https://www.androidhive.info/2017/10/android-working-with-butterknife-viewbinding-library/)
 * [Dependency Injection With Dagger 2 on Android](https://code.tutsplus.com/tutorials/dependency-injection-with-dagger-2-on-android--cms-23345)
+* [Dependency Injection with Dagger 2 - Custom Scopes](http://frogermcs.github.io/dependency-injection-with-dagger-2-custom-scopes/)
