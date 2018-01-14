@@ -503,6 +503,9 @@ public class MainActivity extends BaseActivity {
 ## [Timber](https://github.com/JakeWharton/timber)
 Timber is a logging library for Android. Some advantage to use this over the default logging in Android is:
 1. No tagging is required. The tag is filename where you are logging from.
+2. Add additional fields to be shown in the log, such as line number.
+3. Custom the logs to be shown during debug or release.
+4. Use it with crash reports library such as Crashlytics.
 
 ### Step 1: Gradle
 #### build.gradle(Module)
