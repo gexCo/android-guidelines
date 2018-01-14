@@ -2,6 +2,7 @@
 * [AutoValue](https://github.com/jun159/android-guidelines/blob/master/libraries.md#autovalue)
 * [ButterKnife](https://github.com/jun159/android-guidelines/blob/master/libraries.md#butterknife)
 * [Dagger 2](https://github.com/jun159/android-guidelines/blob/master/libraries.md#dagger-2)
+* [Timber](https://github.com/jun159/android-guidelines/blob/master/libraries.md#timber)
 
 ## [AutoValue](https://github.com/google/auto/tree/master/value)
 AutoValue is a code generating annotation processor that reduces boilerplate code. For example in OOP, classes often comes with getter, setter, equals(Object), hashCode() and toString() methods. These methods are considered as boilerplate as they are written in the standard way in every class. To avoid writing by hand, we use `AutoValue` to auto-generate these methods at compile time. 
@@ -270,8 +271,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
 }
 ```
 
-## [Calligraphy](https://github.com/chrisjenx/Calligraphy)
-
 ## [Dagger 2](https://github.com/google/dagger)
 Dagger 2 library handles dependency injection for Android applications. Dependency Injection is a software design pattern to make applications loosely coupled, extensible and maintainable. There is dependency when an object depends on another object to do work. 
 
@@ -423,9 +422,10 @@ public class MainActivity extends BaseActivity {
   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_main);
+         
          textView = (TextView) findViewById(R.id.textView);
-      
          textView.setBackgroundColor(res.getColor(android.R.color.holo_red_dark));
          
          prefs.edit().putInt("number", 11).apply();
@@ -433,13 +433,90 @@ public class MainActivity extends BaseActivity {
 }
 ```
 
-## [Facebook Stetho](https://github.com/facebook/stetho)
 ## [Gson](https://github.com/google/gson)
 ## [Picasso](https://github.com/square/picasso)
 ## [ReactiveX](https://github.com/ReactiveX/RxAndroid)
 ## [Retrofit](https://github.com/square/retrofit)
 ## [SQL Brite](https://github.com/square/sqlbrite)
+
 ## [Timber](https://github.com/JakeWharton/timber)
+Timber is a logging library for Android. Some advantage to use this over the default logging in Android is:
+1. No tagging is required. The tag is filename where you are logging from.
+
+### Step 1: Gradle
+#### build.gradle(Module)
+```gradle
+
+dependencies {
+    compile 'com.jakewharton.timber:timber:4.0.1'
+}
+```
+
+### Step 2: Timber Initialization
+```java
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        
+        Timber.plant(new Timber.DebugTree());
+    }
+}
+```
+
+### Step 3: Log in Activity
+```java
+public class MainActivity extends BaseActivity {
+
+    private TextView textView;
+  
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        Timber.d("Hello");
+        Timber.v("Goodbye);
+    }
+}
+```
+
+### Custom Log 
+Define the type of logs to be logged. This is useful as VERBOSE and DEBUG logs must be disabled on release builds. We can leave INFORMATION, WARNING and ERROR logs enabled only if they are not leaking private information such as email addresses.
+
+#### Application
+```java
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        
+        if(BuildConfig.DEBUG) {
+            // Debug mode - show all logs
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            // Release mode - only show logs that are important such as warnings and errors to see them in the release version of the app
+            Timber.plant(new ReleaseTree());
+        }
+    }
+}
+```
+
+#### Custom Tree
+```java
+public class ReleaseTree extends Timber.Tree {
+    
+    @Override
+    protected boolean isLoggable(int priority) {
+        if(priority == Log.VERBOSE || priority == Log.DEBUG || priority == LOG.INFO) {
+            return false;
+        }
+        
+        // Only log WARN, ERROR, WTF
+        return true;
+    }
+}
+```
 
 ## References
 * [Android Working With ButterKnife ViewBinding Library](https://www.androidhive.info/2017/10/android-working-with-butterknife-viewbinding-library/)
