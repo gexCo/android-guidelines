@@ -125,8 +125,8 @@ Dagger 2 library handles dependency injection for Android applications. Dependen
 
 A dependency is an object that can be used (as a service). An injection is the passing of a dependency to a dependent object. In dependency injection context, dependencies are supplied to the class that needs dependency to avoid the need for a class itself to create them for software to be loosely coupled and highly maintainable. 
 
-An example in Android context would be to get a reference to SharedPreferences, we have to use `this.getSharedPreferences` where `this` represents `Context` in Android.
-```
+For example, `SharedPreferences` is dependent on `Context`. To get a reference to SharedPreferences, we have to use `this.getSharedPreferences` where `this` represents `Context` in Android. 
+```java
 public class MyApplication extends Application {
 
     private SharedPreferences myPrefs;
@@ -138,10 +138,6 @@ public class MyApplication extends Application {
         myPrefs = this.getSharedPreferences("com.company", Context.MODE_PRIVATE);
     }
 }
-```
-
-Instead of getting `Context` directly, we request `Context` from Dagger and Dagger will look for `Context` on your behalf.
-```
 ```
 
 | Annotation | Description |
@@ -175,6 +171,77 @@ dependencies {
     apt 'com.google.dagger:dagger-compiler:2.0-SNAPSHOT' // Code generation
     provided 'org.glassfish:javax.annotation:10.0-b28'  // Additional annotations required outside Dagger
 }
+```
+
+### Module
+`ApplicationModule` provides the objects needed with its dependencies satisfied. Since `SharedPreferences` is dependent on `Context`, both providers are created in this class to get both `SharedPreferences` and `Context`, with `SharedPreferences` indicating its dependency to `Context` as parameters. Every provider method must have `@Provides` annotation and the class must have `@Module` annotation.
+
+Instead of getting `Context` directly, we request `Context` from Dagger and Dagger will look for `Context` on your behalf via `provideContext()` method. 
+```java
+@Module
+public class ApplicationModule {
+    protected final Application mApplication;
+
+    public ApplicationModule(Application application) {
+        mApplication = application;
+    }
+
+    @Provides
+    Context provideContext() {
+        return mApplication;
+    }
+
+    @Provides
+    @Singleton
+    SharedPreferences provideSharedPreferences(Context app) {
+        return app.getSharedPreferences("pref_title", Context.MODE_PRIVATE);
+    }
+
+}
+```
+### Injection
+An `Application` class is where injection happens. Another way is to add `@Inject` annotation in Vehicle constructor. Note that `@Inject` can be used to request dependencies in constructor, fields or even methods.
+```java
+public class MyApplication extends Application  {
+
+    ApplicationComponent mApplicationComponent;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    public static MyApplication get(Context context) {
+        return (MyApplication) context.getApplicationContext();
+    }
+
+    public ApplicationComponent getComponent() {
+        if (mApplicationComponent == null) {
+            mApplicationComponent = DaggerApplicationComponent.builder()
+                    .applicationModule(new ApplicationModule(this))
+                    .build();
+        }
+        return mApplicationComponent;
+    }
+
+    // Needed to replace the component with a test specific one
+    public void setComponent(ApplicationComponent applicationComponent) {
+        mApplicationComponent = applicationComponent;
+    }
+}
+```
+
+### Component
+Connection between provider of dependencies `@Module` and class requesting them `@Inject` is made using `@Component` as an interface. Add methods for dependent providers.
+```java
+@Singleton
+@Component(modules = ApplicationModule.class)
+public interface ApplicationComponent {
+
+    void inject(MyApplication application);
+
+}
+
 ```
 
 ## [Facebook Stetho](https://github.com/facebook/stetho)
