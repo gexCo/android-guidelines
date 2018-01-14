@@ -174,9 +174,9 @@ dependencies {
 ```
 
 ### Module
-Instead of getting `Context` directly, we request `Context` from Dagger and Dagger will look for `Context` on your behalf via `provideContext()` method. 
-
 `ApplicationModule` provides the objects needed with its dependencies satisfied. Since `SharedPreferences` is dependent on `Context`, both providers are created in this class to get both `SharedPreferences` and `Context`, with `SharedPreferences` indicating its dependency to `Context` as parameters. Every provider method must have `@Provides` annotation and the class must have `@Module` annotation.
+
+To use `SharedPreferences`, instead of getting `Context` directly, we request `Context` from Dagger and Dagger will look for `Context` on our behalf via `provideContext()` method. 
 
 ```java
 @Module
