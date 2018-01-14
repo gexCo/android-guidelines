@@ -1,6 +1,6 @@
 # Android Testing
-* [Crashlytics](https://github.com/jun159/android-guidelines/blob/master/libraries.md#crashlytics)
-* [Timber](https://github.com/jun159/android-guidelines/blob/master/libraries.md#timber)
+* [Crashlytics](https://github.com/jun159/testing/blob/master/libraries.md#crashlytics)
+* [Timber](https://github.com/jun159/testing/blob/master/libraries.md#timber)
 
 ## [Crashlytics](https://fabric.io/kits/ios/crashlytics?utm_campaign=crashlytics-marketing&utm_medium=natural)
 Crashlytics is a tool that provides crash reports. This tool can be used with logging libraries such as Timber.
