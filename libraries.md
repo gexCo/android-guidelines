@@ -3,6 +3,11 @@
 * [ButterKnife](https://github.com/jun159/android-guidelines/blob/master/libraries.md#butterknife)
 * [Crashlytics](https://github.com/jun159/android-guidelines/blob/master/libraries.md#crashlytics)
 * [Dagger 2](https://github.com/jun159/android-guidelines/blob/master/libraries.md#dagger-2)
+* [Gson](https://github.com/jun159/android-guidelines/blob/master/libraries.md#gson)
+* [Picasso](https://github.com/jun159/android-guidelines/blob/master/libraries.md#picasso)
+* [ReactiveX](https://github.com/jun159/android-guidelines/blob/master/libraries.md#reactivex)
+* [Retrofit](https://github.com/jun159/android-guidelines/blob/master/libraries.md#retrofit)
+* [SQL Brite](https://github.com/jun159/android-guidelines/blob/master/libraries.md#sql-brite)
 * [Timber](https://github.com/jun159/android-guidelines/blob/master/libraries.md#timber)
 
 ## [AutoValue](https://github.com/google/auto/tree/master/value)
