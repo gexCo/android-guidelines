@@ -149,7 +149,7 @@ public class MyApplication extends Application {
 | `@Singleton` | Object is created only once and same object is used everywhere |
 | `@PerActivity` | Custom annotation where object is created only once throughout an activity, but another instance is created in a different activity |
 
-### Gradle
+### Step 1: Gradle
 #### build.gradle(Project)
 ```gradle
 buildscript {
@@ -173,7 +173,7 @@ dependencies {
 }
 ```
 
-### Module
+### Step 2: Create @Module Class
 `ApplicationModule` provides the objects needed with its dependencies satisfied. Since `SharedPreferences` is dependent on `Context`, both providers are created in this class to get both `SharedPreferences` and `Context`, with `SharedPreferences` indicating its dependency to `Context` as parameters. Every provider method must have `@Provides` annotation and the class must have `@Module` annotation.
 
 To use `SharedPreferences`, instead of getting `Context` directly, we request `Context` from Dagger and Dagger will look for `Context` on our behalf via `provideContext()` method. 
@@ -191,16 +191,21 @@ public class ApplicationModule {
     Context provideContext() {
         return mApplication;
     }
+    
+      @Provides
+    @Singleton
+    Resources provideResources() {
+        return application.getResources();
+    }
 
     @Provides
     @Singleton
     SharedPreferences provideSharedPreferences(Context app) {
         return app.getSharedPreferences("pref_title", Context.MODE_PRIVATE);
     }
-
 }
 ```
-### Injection
+### Step 3: Request Dependencies in Dependent Objects via Injection
 An `Application` class is where injection happens. Another way is to add `@Inject` annotation in constructor, fields or even methods.
 ```java
 public class MyApplication extends Application  {
@@ -224,25 +229,56 @@ public class MyApplication extends Application  {
         }
         return mApplicationComponent;
     }
-
-    // Needed to replace the component with a test specific one
-    public void setComponent(ApplicationComponent applicationComponent) {
-        mApplicationComponent = applicationComponent;
-    }
 }
 ```
 
-### Component
-Connection between provider of dependencies `@Module` and class requesting them `@Inject` is made using `@Component` as an interface. Add methods for dependent providers.
+### Step 4: Use `@Component` to Connect `@Module` with `@Inject`
+Connection between provider of dependencies `@Module` and class requesting them `@Inject` is made using `@Component` as an interface. Specify places (Activity / Application) to inject.
 ```java
 @Singleton
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
     void inject(MyApplication application);
+    
+    void inject(BaseActivity baseActivity);
 
 }
 
+```
+
+### Step 5: Use `@Component` Interface to Obtain Objects
+Create `BaseActivity` class that every Activity in the application must implement. 
+```java
+public class BaseActivity extends AppCompatActivity {
+    
+    @Inject public SharedPreferences prefs;
+    @Inject public Context context;
+    @Inject public Resources res;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+         MyApplication.get(this).getComponent().inject(this);
+    }
+}
+```
+
+### Step 6: Create an `Activity` that implements `BaseActivity`
+```java
+public class MainActivity extends BaseActivity {
+
+    private TextView textView;
+  
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        
+         textView = (TextView) findViewById(R.id.textView);
+      
+         textView.setBackgroundColor(res.getColor(android.R.color.holo_red_dark));
+         
+         prefs.edit().putInt("number", 11).apply();
+    }
+}
 ```
 
 ## [Facebook Stetho](https://github.com/facebook/stetho)
