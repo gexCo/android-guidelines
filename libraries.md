@@ -1,7 +1,155 @@
 # Android Libraries
 
 ## [AutoValue](https://github.com/google/auto/tree/master/value)
+AutoValue is a code generating annotation processor that reduces boilerplate code. For example in OOP, classes often comes with getter, setter, equals(Object), hashCode() and toString() methods. These methods are considered as boilerplate as they are written in the standard way in every class. To avoid writing by hand, we use `AutoValue` to auto-generate these methods at compile time. 
 
+### User (Manual)
+```java
+public class User {
+
+    private String firstName;
+    private String lastName;
+    
+    public User(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    
+    public String getFirstName() {
+        return this.firstName;
+    }
+    
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    
+    public String getLastName() {
+        return this.lastName;
+    }
+    
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof User) {
+            return this.firstName.equals(o.firstName) 
+                && this.lastName.equals(o.lastName);
+        }
+
+        return false;
+    }
+    
+    @Override 
+    public int hashCode() {
+        int result = firstName != null ? firstName.hashCode : 0;
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        return result;
+    }
+    
+    @Override 
+    public String toString() {
+        return "User(firstName='" + firstName + "\'" +
+            lastName='" + lastName + "\')";
+    }
+}
+```
+
+### Step 1: Gradle
+#### build.gradle(Project)
+```gradle
+buildscript {
+    // ...
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+```
+
+#### build.gradle(Module)
+```gradle
+apply plugin: 'com.neenbedankt.android-apt'
+
+//...
+
+dependencies {
+    provided 'com.google.auto.value:auto-value-parcel:1.2-rc1'
+    apt 'com.google.auto.value:auto-value:1.2-rc1'
+    apt 'com.ryanharter.auto.value:auto-value-parcel:0.2.3-rc2' // Parcelable
+    compile 'com.ryanharter.auto.value:auto-value-parcel-adapter:0.2.3.rc2' // TypeAdapter
+}
+```
+
+### Step 2: Using AutoValue in User object
+```java
+@AutoValue
+public abstract class User {
+    public abstract String firstName();
+    public abstract String lastName();
+    
+    public static User with(String firstName, String lastName) {
+        return new AutoValue_User(firstName, lastName);
+    }
+    
+    public String fullName() {
+        return firstName() + lastName();
+    }
+}
+```
+
+### Parcelable
+When passing complex objects between Activities in Android (e.g. `intent.putExtra("user", user)`), the object must be parcelable. Parcelable is an efficient serialization mechanism but contains many boilerplate code. We can use `AutoValue` by simply implementing `Parcelable` in our class to avoid writing boilerplate code by hand. 
+```java
+@AutoValue
+public abstract class User implements Parcelable {
+    public abstract String firstName();
+    public abstract String lastName();
+    
+    public static User with(String firstName, String lastName) {
+        return new AutoValue_User(firstName, lastName);
+    }
+    
+    public String fullName() {
+        return firstName() + lastName();
+    }
+}
+```
+
+### TypeAdapters
+If class contains properties that are not `Parcelable`, we can use `TypeAdapters` offered in AutoValue library. It allows you to define custom parcelling behaviour to ensure AutoValue can be used with any type.
+```java
+@AutoValue
+public abstract class User implements Parcelable {
+    public abstract String firstName();
+    public abstract String lastName();
+    @ParcelAdapter(AccountTypeAdapter.class) public abstract Account account();  // Not parcelable, e.g. from external library
+    
+    public static User with(String firstName, String lastName) {
+        return new AutoValue_User(firstName, lastName);
+    }
+    
+    public String fullName() {
+        return firstName() + lastName();
+    }
+}
+```
+
+Write a type adapter class that implements `TypeAdapter`.
+```java
+public class AccountTypeAdapter implements TypeAdapter<Account> {
+    @Override
+    public Account fromParcel(Parcel in) {
+        return new Account(in.readString(), new Date(in.readString()));
+    }
+    
+    @Override
+    public void toParcel(Account value, Parcel dest) {
+        dest.writeString(value.tokenId);
+        dest.writeLong(value.expiration.getTime());
+    }
+}
+```
 
 ## [Butterknife](https://github.com/JakeWharton/butterknife)
 Butterknife library is used for view injection in Android using annotations.
@@ -15,7 +163,7 @@ Butterknife library is used for view injection in Android using annotations.
 | `@BindColor` | Binds color resource | `@BindColor(R.color.colorPrimary)`<br>`int colorBar`|
 | `@BindAnim` | Binds anim resource | `@BindAnim(R.anim.move_left)`<br>`Animation animMoveLeft` |
 
-### Gradle
+### Step 1: Gradle
 #### build.gradle(Project)
 ```gradle
 buildscript {
@@ -38,7 +186,8 @@ dependencies {
 }
 ```
 
-### Activity
+### Step 2: Using in Components
+#### Activity
 Call `ButterKnife.bind(this)` in `onCreate()` method after `setContentView()` is called.
 ```java
 public class MainActivity extends AppCompatActivity {
@@ -68,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-### Fragment
+#### Fragment
 The usage is similar to Activity but we have to unbind to free up some memory space.
 ```java
 public class MyFragment extends Fragment {
@@ -101,7 +250,7 @@ public class MyFragment extends Fragment {
 }
 ```
 
-### ViewHolder
+#### ViewHolder
 ```java
 public class MyViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.name)
