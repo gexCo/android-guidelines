@@ -201,7 +201,7 @@ public class ApplicationModule {
 }
 ```
 ### Injection
-An `Application` class is where injection happens. Another way is to add `@Inject` annotation in Vehicle constructor. Note that `@Inject` can be used to request dependencies in constructor, fields or even methods.
+An `Application` class is where injection happens. Another way is to add `@Inject` annotation in constructor, fields or even methods.
 ```java
 public class MyApplication extends Application  {
 
