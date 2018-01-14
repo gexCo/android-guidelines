@@ -102,6 +102,7 @@ dependencies {
 ```java
 @AutoValue
 public abstract class User {
+
     public abstract String firstName();
     public abstract String lastName();
     
@@ -120,6 +121,7 @@ When passing complex objects between Activities in Android (e.g. `intent.putExtr
 ```java
 @AutoValue
 public abstract class User implements Parcelable {
+
     public abstract String firstName();
     public abstract String lastName();
     
@@ -138,6 +140,7 @@ If class contains properties that are not `Parcelable`, we can use `TypeAdapters
 ```java
 @AutoValue
 public abstract class User implements Parcelable {
+
     public abstract String firstName();
     public abstract String lastName();
     @ParcelAdapter(AccountTypeAdapter.class) public abstract Account account();  // Not parcelable, e.g. from external library
@@ -155,6 +158,7 @@ public abstract class User implements Parcelable {
 Write a type adapter class that implements `TypeAdapter`.
 ```java
 public class AccountTypeAdapter implements TypeAdapter<Account> {
+
     @Override
     public Account fromParcel(Parcel in) {
         return new Account(in.readString(), new Date(in.readString()));
@@ -214,6 +218,7 @@ public class MyApplication extends Application {
 ```java
 @AutoValue
 public abstract class User {
+
     @SerializedName("firstName")
     public abstract String firstName();
     @SerializedName("lastName")
@@ -234,6 +239,7 @@ Instead of using constructors, we can use Builders to set values in a class usin
 ```java
 @AutoValue
 public abstract class User {
+
     @SerializedName("firstName")
     public abstract String firstName();
     @SerializedName("lastName")
@@ -358,6 +364,7 @@ public class MyFragment extends Fragment {
 #### ViewHolder
 ```java
 public class MyViewHolder extends RecyclerView.ViewHolder {
+
     @BindView(R.id.name)
     TextView name;
  
@@ -377,6 +384,7 @@ Crashlytics is a tool that provides crash reports. This tool can be used with lo
 #### Application
 ```java
 public class MyApplication extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -481,7 +489,7 @@ Scopes mechanism cares about keeping single instance of class as long as its sco
 
 | Annotation | Description |
 | --- | --- |
-| `@UserScope` | Scope for classes instances associated with picked user, keeps references as long as User exists<br>(E.g. Logged-in user) | `@PerActivity` | Scope to permit objects whose lifetime should conform to the life of an Activity |
+| `@UserScope` | Scope for classes instances associated with picked user, keeps references as long as User exists<br>(E.g. Logged-in user) | `@PerActivity` | Scope to permit objects who will live as long as Activity is alive |
 | `@ConfigPersistent` | Scope to annotate dependencies that need to survive configuration changes (e.g. Presenters)  |
 
 Simply define a custom scope like this:
@@ -524,6 +532,7 @@ To use `SharedPreferences`, instead of getting `Context` directly, we request `C
 ```java
 @Module
 public class ApplicationModule {
+
     protected final Application mApplication;
 
     public ApplicationModule(Application application) {
@@ -650,6 +659,7 @@ dependencies {
 ### Step 2: Timber Initialization
 ```java
 public class MyApplication extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -694,6 +704,7 @@ Define the type of logs to be logged. This is useful as VERBOSE and DEBUG logs m
 #### Application
 ```java
 public class MyApplication extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -739,6 +750,7 @@ Create `debug` folder under `app->src` and `java` folder under `debug` folder. C
 #### Step 2: Application
 ```java
 public class MyApplication extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -761,6 +773,7 @@ Create `release` folder under `app->src` and `java` folder under `release` folde
 #### Step 2: Application
 ```java
 public class MyApplication extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();
