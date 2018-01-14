@@ -84,10 +84,17 @@ apply plugin: 'com.neenbedankt.android-apt'
 //...
 
 dependencies {
+    // AutoValue
     provided 'com.google.auto.value:auto-value-parcel:1.2-rc1'
     apt 'com.google.auto.value:auto-value:1.2-rc1'
     apt 'com.ryanharter.auto.value:auto-value-parcel:0.2.3-rc2' // Parcelable
     compile 'com.ryanharter.auto.value:auto-value-parcel-adapter:0.2.3.rc2' // TypeAdapter
+    annotationProcessor 'com.ryanharter.auto.value:auto-value-gson:0.4.5'   // Gson
+    provided 'com.ryanharter.auto.value:auto-value-gson:0.4.5'  // Gson
+    
+    // Retrofit
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 }
 ```
 
@@ -157,6 +164,94 @@ public class AccountTypeAdapter implements TypeAdapter<Account> {
     public void toParcel(Account value, Parcel dest) {
         dest.writeString(value.tokenId);
         dest.writeLong(value.expiration.getTime());
+    }
+}
+```
+
+### AutoValue Gson Extension with Retrofit 2.0
+#### TypeAdapter
+```java
+@GsonTypeAdapterFactory
+public abstract class AutoValueGsonFactory implements TypeAdapterFactory {
+
+    public static TypeAdapterFactory create() {
+        return new AutoValueGson_AutoValueGsonFactory();
+    }
+}
+```
+
+#### Application
+```java
+public class MyApplication extends Application {
+
+    private MyService service;
+    
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        
+        GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(new GsonBuilder()
+                .registerTypeAdapterFactory(AutoValueGsonFactory.create())
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .create());
+                    
+        Retrofit retrofitClient = new Retrofit.Builder()
+            .baseUrl(BuildConfig.END_POINT)
+            .addConverterFactory(gsonConverterFactory)
+            .client(okHttpClient.build())
+            .build();
+            
+        myService = retrofit.create(MyService.class);
+    }
+ 
+    public MyService getService() {
+        return myService;
+    }
+}
+```
+
+#### User
+```java
+@AutoValue
+public abstract class User {
+    @SerializedName("firstName")
+    public abstract String firstName();
+    @SerializedName("lastName")
+    public abstract String lastName();
+    
+    public static User create(String firstName, String lastName) {
+        return new AutoValue_User(firstName, lastName);
+    }
+    
+    public static TypeAdapter<User> typeAdapter(Gson gson) {
+        return new AutoValue_User.GsonTypeAdapter(gson);
+    }
+}
+```
+
+### AutoValue with Builders
+Instead of using constructors, we can use Builders to set values in a class using `AutoValue.Builder` annotation for inner Builder class.
+```java
+@AutoValue
+public abstract class User {
+    @SerializedName("firstName")
+    public abstract String firstName();
+    @SerializedName("lastName")
+    public abstract String lastName();
+    
+    public static Builder builder() {
+        return new AutoValue_User.Builder();
+    }
+    
+    public static TypeAdapter<User> typeAdapter(Gson gson) {
+        return new AutoValue_User.GsonTypeAdapter(gson);
+    }
+    
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder setFirstName(String firstName);
+        public abstract Builder setLastName(String lastName);
+        public abstract User build();
     }
 }
 ```
@@ -663,5 +758,6 @@ public class ReleaseTree extends Timber.Tree {
 ```
 
 ## References
+* [AutoValue Gson Extension with Retrofit 2.0](https://medium.com/3xplore/autovalue-with-retrofit-2-0-61f9530787b1)
 * [Android Working With ButterKnife ViewBinding Library](https://www.androidhive.info/2017/10/android-working-with-butterknife-viewbinding-library/)
 * [Dependency Injection With Dagger 2 on Android](https://code.tutsplus.com/tutorials/dependency-injection-with-dagger-2-on-android--cms-23345)
