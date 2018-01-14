@@ -1,6 +1,7 @@
 # Android Libraries
 * [AutoValue](https://github.com/jun159/android-guidelines/blob/master/libraries.md#autovalue)
 * [ButterKnife](https://github.com/jun159/android-guidelines/blob/master/libraries.md#butterknife)
+* [Crashlytics](https://github.com/jun159/android-guidelines/blob/master/libraries.md#crashlytics)
 * [Dagger 2](https://github.com/jun159/android-guidelines/blob/master/libraries.md#dagger-2)
 * [Timber](https://github.com/jun159/android-guidelines/blob/master/libraries.md#timber)
 
@@ -270,6 +271,66 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     }
 }
 ```
+## [Crashlytics](https://fabric.io/kits/ios/crashlytics?utm_campaign=crashlytics-marketing&utm_medium=natural)
+Crashlytics is a tool that provides crash reports. This tool can be used with logging libraries such as Timber.
+
+#### Application
+```java
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        
+        if(BuildConfig.DEBUG) {
+            // Debug mode - show all logs
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            // Release mode - only show logs that are important such as warnings and errors to see them in the release version of the app
+            Fabric.with(this, new Crashlytics());
+            Timber.plant(new ReleaseTree());
+        }
+    }
+}
+```
+
+#### Custom Tree
+```java
+public class ReleaseTree extends Timber.Tree {
+
+    private static final int MAX_LOG_LENGTH = 4000;
+    
+    @Override
+    protected boolean isLoggable(int priority) {
+        if(priority == Log.VERBOSE || priority == Log.DEBUG || priority == LOG.INFO) {
+            return false;
+        }
+        
+        // Only log WARN, ERROR, WTF
+        return true;
+    }
+    
+    @Override
+    protected void log(int priority, String tag, String message, Throwable t) {
+        if(isLoggable(priority) {
+            
+            // Report caught exceptions to Crashlytics
+            if(priority == Log.ERROR && t != null) {
+                Crashlytics.log(e);
+            }
+            
+            if(message.length() < MAX_LOG_LENGTH) {
+                if(priority == Log.ASSERT) {
+                    Log.wtf(tag, message);
+                } else {
+                    Log.println(priority, tag, message);
+                }
+                
+                return;
+            }
+        }
+    }
+}
+```
 
 ## [Dagger 2](https://github.com/google/dagger)
 Dagger 2 library handles dependency injection for Android applications. Dependency Injection is a software design pattern to make applications loosely coupled, extensible and maintainable. There is dependency when an object depends on another object to do work. 
@@ -459,7 +520,13 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         
-        Timber.plant(new Timber.DebugTree());
+        Timber.plant(new Timber.DebugTree() {
+            // Add line number to the tag
+            @Override
+            protected String createStackElementTag(StackTraceElement element) {
+                return super.createStackElementTag(element) + ": " + element.getLineNumber();
+            }
+        }
     }
 }
 ```
@@ -476,9 +543,15 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         
         Timber.d("Hello");
-        Timber.v("Goodbye);
+        Timber.v("Goodbye");
     }
 }
+```
+
+#### Step 4: Logcat
+```
+10-08 14:31:39.617 1933-19833/? D/MainActivity:14: Hello      // Line 14 in MainActivity
+10-08 14:31:39.617 1933-19833/? D/MainActivity:15: Goodbye    // Line 15 in MainActivity
 ```
 
 ### Custom Log 
@@ -491,9 +564,16 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         
+        // OR setup debug and release environment as shown below
         if(BuildConfig.DEBUG) {
             // Debug mode - show all logs
-            Timber.plant(new Timber.DebugTree());
+            Timber.plant(new Timber.DebugTree() {
+                // Add line number to the tag
+                @Override
+                protected String createStackElementTag(StackTraceElement element) {
+                    return super.createStackElementTag(element) + ": " + element.getLineNumber();
+                }
+            }
         } else {
             // Release mode - only show logs that are important such as warnings and errors to see them in the release version of the app
             Timber.plant(new ReleaseTree());
@@ -502,7 +582,63 @@ public class MyApplication extends Application {
 }
 ```
 
-#### Custom Tree
+#### ReleaseTree
+```java
+public class ReleaseTree extends Timber.Tree {
+    
+    @Override
+    protected boolean isLoggable(int priority) {
+        if(priority == Log.VERBOSE || priority == Log.DEBUG || priority == LOG.INFO) {
+            return false;
+        }
+        
+        // Only log WARN, ERROR, WTF
+        return true;
+    }
+}
+```
+
+### Debug Build Variant
+#### Step 1: Create `debug` folder 
+Create `debug` folder under `app->src` and `java` folder under `debug` folder. Create package that is of the same name as your application package.
+
+#### Step 2: Application
+```java
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        
+        Timber.plant(new Timber.DebugTree() {
+            // Add line number to the tag
+            @Override
+            protected String createStackElementTag(StackTraceElement element) {
+                return super.createStackElementTag(element) + ": " + element.getLineNumber();
+            }
+        }
+    }
+}
+```
+
+### Release Build Variant
+#### Step 1: Create `release` folder 
+Create `release` folder under `app->src` and `java` folder under `release` folder. Create package that is of the same name as your application package, for example `com.company`. Release version shall only log warnings, error and wtfs.
+
+#### Step 2: Application
+```java
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        
+        Timber.plant(new ReleaseTree());
+        Fabric.with(this, new Crashlytics());
+    }
+}
+```
+
+#### Step 3: ReleaseTree
+#### ReleaseTree
 ```java
 public class ReleaseTree extends Timber.Tree {
     
