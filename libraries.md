@@ -4,7 +4,7 @@
 * [Dagger 2](https://github.com/jun159/android-guidelines/blob/master/libraries.md#dagger-2)
 * [Gson](https://github.com/jun159/android-guidelines/blob/master/libraries.md#gson)
 * [Picasso](https://github.com/jun159/android-guidelines/blob/master/libraries.md#picasso)
-* [ReactiveX](https://github.com/jun159/android-guidelines/blob/master/libraries.md#reactivex)
+* [RxAndroid](https://github.com/jun159/android-guidelines/blob/master/libraries.md#reactivex)
 * [Retrofit](https://github.com/jun159/android-guidelines/blob/master/libraries.md#retrofit)
 * [SQL Brite](https://github.com/jun159/android-guidelines/blob/master/libraries.md#sql-brite)
 
@@ -573,8 +573,54 @@ public class MainActivity extends BaseActivity {
 
 ## [Gson](https://github.com/google/gson)
 ## [Picasso](https://github.com/square/picasso)
-## [ReactiveX](https://github.com/ReactiveX/RxAndroid)
+
+## [RxAndroid](https://github.com/ReactiveX/RxAndroid)
+RxAndroid is an Android library that handles observer pattern. In software engineering, observer design pattern is used when observable (subject), maintains a list of its dependents, called observers, and notifies them automatically of any state changes, usually by calling one of their methods. The observer pattern is also a key part in the familiar model–view–controller (MVC) architectural pattern. Read more at [Observer Design Pattern](https://github.com/jun159/SoftwareEngineering/wiki/Object-Interaction-Design#observer)
+
+### Step 1: Gradle
+#### build.gradle(Module)
+```gradle
+dependencies {
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.8'
+}
+```
+### Step 2: 
+```
+public class MainActivity extends AppCompatActivity {
+    private TextView textView;
+    private Observable<String> mObservable;
+    private Observer<String> mObserver;
+    
+    @Override
+    protected void onCreate(Bundle savedIntanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        textView = (TextView) findViewById(R.id.textView);
+        mObservable = Observable.just("Hello);
+        
+        mObserver = new Observer<String>() {
+            @Override 
+            public void onSubsribe(Disposable d) {
+            
+            }
+            
+            @Override 
+            public void onNext(Disposable d) {
+                textView.setText(s);
+            }
+        }
+    }
+    
+    public void subscribeNow(View view) {
+        mObservable.subscribe(mObserver);
+    }
+}
+```
+
 ## [Retrofit](https://github.com/square/retrofit)
+
 ## [SQL Brite](https://github.com/square/sqlbrite)
 
 ## References
